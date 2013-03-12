@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/beans
+		  http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<amq:connectionFactory id="jmsConnectionFactory"
+		brokerURL="${jms.brokerURL}" />
+		
+	<amq:connectionFactory id="jmsLotserverConnectionFactory"
+		brokerURL="${jms.lotserver.brokerURL}" />
+
+	<bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+		<property name="maxConnections" value="8" />
+		<property name="maximumActive" value="500" />
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+	</bean>
+	
+	<bean id="pooledLotserverConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+		<property name="maxConnections" value="8" />
+		<property name="maximumActive" value="500" />
+		<property name="connectionFactory" ref="jmsLotserverConnectionFactory" />
+	</bean>
+
+
+	<camel:camelContext id="lotteryCamelContext" trace="true">
+		<camel:package>com.ruyicai.lottery.camel</camel:package>
+		<camel:jmxAgent id="camelAgent" createConnector="true"
+			registryPort="${camel.jmxAgent.registryPort}" />
+	</camel:camelContext>
+	<camel:camelContext id="lotserverCamelContext">
+	</camel:camelContext>
+	
+	<bean id="jmsCfg" class="com.ruyicai.lotserver.jms.WithoutTMJmsConfiguration">
+		<property name="connectionFactory" ref="pooledConnectionFactory"></property>
+	</bean>
+	<bean id="jmsLotserverCfg" class="com.ruyicai.lotserver.jms.WithoutTMJmsConfiguration">
+		<property name="connectionFactory" ref="pooledLotserverConnectionFactory"></property>
+	</bean>
+	
+	<bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+		<constructor-arg type="org.apache.camel.component.jms.JmsConfiguration"
+			ref="jmsCfg"></constructor-arg>
+		<property name="connectionFactory" ref="pooledConnectionFactory"></property>
+		<property name="transacted" value="true"></property>
+	</bean>
+	<bean id="jmsLotserver" class="org.apache.camel.component.jms.JmsComponent">
+		<constructor-arg type="org.apache.camel.component.jms.JmsConfiguration"
+			ref="jmsLotserverCfg"></constructor-arg>
+		<property name="connectionFactory" ref="pooledLotserverConnectionFactory"></property>
+		<property name="transacted" value="true"></property>
+	</bean>
+
+</beans>

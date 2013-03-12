@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/beans">
+
+	<!-- 获取中奖排行 -->
+	<bean id="prizeBankDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="prizeBankTimer"></property>
+		<property name="targetMethod" value="process"></property>
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="prizeBankTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="prizeBankDetail" />
+		<property name="startDelay" value="1000" />
+		<property name="repeatInterval" value="300000" /> <!-- 每5分钟执行一次 -->
+	</bean>
+	
+	<!-- 总管理 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="prizeBankTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>
