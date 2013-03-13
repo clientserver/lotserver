@@ -87,9 +87,9 @@ public class CaseLotQueryService {
 			JSONObject requestObject = new JSONObject(); //查询条件
 			requestObject.put("EQS_batchcode", clientInfo.getBatchCode());
 			if (lotNo!=null&&lotNo.equals("JC_Z")) { //竞彩足球
-				paramStr.append("&lotno=J00001&lotno=J00002&lotno=J00003&lotno=J00004");
+				paramStr.append("&lotno=J00001&lotno=J00002&lotno=J00003&lotno=J00004&lotno=J00011");
 			} else if (lotNo!=null&&lotNo.equals("JC_L")) { //竞彩篮球
-				paramStr.append("&lotno=J00005&lotno=J00006&lotno=J00007&lotno=J00008");
+				paramStr.append("&lotno=J00005&lotno=J00006&lotno=J00007&lotno=J00008&lotno=J00012");
 			} else if (lotNo!=null&&lotNo.equals("ZC")) { //足彩
 				paramStr.append("&lotno=T01003&lotno=T01004&lotno=T01005&lotno=T01006");
 			} else {
