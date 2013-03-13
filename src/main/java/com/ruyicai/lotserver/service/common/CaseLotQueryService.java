@@ -16,6 +16,7 @@ import com.ruyicai.lotserver.util.MemoUtil;
 import com.ruyicai.lotserver.util.common.DateParseFormatUtil;
 import com.ruyicai.lotserver.util.common.HttpUtil;
 import com.ruyicai.lotserver.util.common.PropertiesUtil;
+import com.ruyicai.lotserver.util.common.StringUtil;
 import com.ruyicai.lotserver.util.common.Tools;
 import com.ruyicai.lotserver.util.lot.CaseLotUtil;
 import com.ruyicai.lotserver.util.lot.LotTypeUtil;
@@ -386,6 +387,8 @@ public class CaseLotQueryService {
 					String orderInfo = torderObject.getString("orderinfo"); //orderInfo
 					String orderState = torderObject.getString("orderstate"); //订单状态
 					String winBaseCode = torderObject.getString("winbasecode"); //开奖号码
+					//判断期号是否为空
+					batchCode = (StringUtil.isEmpty(batchCode)||batchCode.equals("null")) ? "" : batchCode.trim();
 					//方案描述
 					description = (Tools.isEmpty(description)||description.equals("null")) ? "" : description;
 					//认购金额

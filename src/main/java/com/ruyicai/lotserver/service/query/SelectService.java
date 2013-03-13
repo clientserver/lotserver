@@ -518,6 +518,8 @@ public class SelectService {
 					String orderInfo = torderObject.getString("orderinfo"); //orderInfo
 					String orderState = torderObject.getString("orderstate"); //订单状态
 					String winBaseCode = torderObject.getString("winbasecode"); //开奖号码
+					//判断期号是否为空
+					batchCode = (StringUtil.isEmpty(batchCode)||batchCode.equals("null")) ? "" : batchCode.trim();
 					//方案描述
 					description = (Tools.isEmpty(description)||description.equals("null")) ? "" : description;
 					//已认购金额
