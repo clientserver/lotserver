@@ -28,7 +28,6 @@ import com.ruyicai.lotserver.consts.Constants;
  * @author Administrator
  * 
  */
-@SuppressWarnings("restriction")
 public class Tools {
 
 	private static Logger logger = Logger.getLogger(Tools.class);
